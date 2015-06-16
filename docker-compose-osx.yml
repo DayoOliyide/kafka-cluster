@@ -1,0 +1,26 @@
+zookeeper:
+  image: samsara/zookeeper
+  ports:
+    - "2181:2181"
+    - "15001:15000"
+  environment:
+    ZK_SERVER_ID: 1
+  volumes:
+    - /tmp/logs/zk1:/logs
+    - /tmp/data/zk1:/data
+
+
+kafka:
+  build: ./kafka
+  ports:
+    - "9092:9092"
+    - "15002:15000"
+  links:
+    - zookeeper:zookeeper
+  environment:
+    KAFKA_BROKER_ID: 1
+    KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
+  volumes:
+    - /tmp/logs/kafka1:/logs
+    - /tmp/data/kafka1:/data
+
