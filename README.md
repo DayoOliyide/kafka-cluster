@@ -34,7 +34,7 @@ Replace REPLACE-ME with the Docker (Macs boot2docker) ip address.
 - To send a message to a topic ``echo 'Fear is the mind killer' | ./kafka-console-producer.sh --broker-list
 [REPLACE-ME]:9092 --topic test``
 
-- To send a bunch of messages via the console (press enter to send each message) ``./kafka-console-producer.sh --broker-list
+- To send a bunch of messages (manually) via the console (press enter to send each message) ``./kafka-console-producer.sh --broker-list
 [REPLACE-ME]:9092 --topic test``
 
 - To continuously consume the latest messages from a topic and all it's partitions ``./kafka-console-consumer.sh --zookeeper [REPLACE-ME]:2181 --topic test`` 
