@@ -1,19 +1,18 @@
 # Kafka Development Environment
 This repository gives you the ability to create a local kafka cluster for development and experimentation
 
-# Setup
+##  Setup
 1. Install [Docker](https://docs.docker.com/installation/#installation) onto your system 
 2. Install [Docker-compose](https://docs.docker.com/compose/install/)
 3. Download [0.8.2.1](http://kafka.apache.org/downloads.html) version of Kafka and unzip in a location of your choice, you'll need this mainly for the kafka command/console tools
 4. After cloning this repo, set up the appropriate docker-compose.yml link.
-There are multiple configurations for different kafka dev setups for either Linux or OSX.
-The general command format is ``ln -fns ./configs/zk[NUMBEROFNODES]-kafka[NUMBEROFNODES]-[OS] docker-compose.yml``
-So for Linux ``ln -fns ./configs/zk1node-kafka1node-linux.yml docker-compose.yml``
-and for Macs ``ln -fns ./configs/zk1node-kafka1node-osx.yml docker-compose.yml``
+There are multiple configurations for different kafka dev setups for either Linux or OSX.  
+The general command format is ``ln -fns ./configs/zk[NUMBEROFNODES]-kafka[NUMBEROFNODES]-[OS] docker-compose.yml``  
+So for Linux ``ln -fns ./configs/zk1node-kafka1node-linux.yml docker-compose.yml``  
+and for Macs ``ln -fns ./configs/zk1node-kafka1node-osx.yml docker-compose.yml``  
 For now use the one node zookeeper one node kafka (zk1node-kafka1node yamls), the multi-node setup is not finished.
-If you need to repoint the soft link, please shutdown and remove the current configuration first ``docker-compose stop && docker-compose rm``
 
-# Running 
+##  Running 
 1. This step only applies to Linux users, Mac users should skip this. You'll need to create local directories (under ~/tmp/docker) that are linked to directories internally used by the containers. Set up all associated local volumes/directories by running this command
 ``
 mkdir -p `grep /tmp/docker docker-compose.yml | cut -d' ' -f6 | cut -d':' -f1 | cut -c 2- | sort | xargs -I {} echo $HOME{}`
@@ -22,11 +21,11 @@ mkdir -p `grep /tmp/docker docker-compose.yml | cut -d' ' -f6 | cut -d':' -f1 | 
 3. Start all the needed containers.Run ``docker-compose up -d``
 4. Running ``docker-compose ps`` or ``docker ps`` should show at least a Zookeeper Container and a Kafka Container
 
-# Stopping
+##  Stopping
 To stop all the containers running ``docker-compose stop`` 
 To remove all the containers ``docker-compose rm``
 
-# Kafka Commands
+##  Kafka Commands
 The following commands are in the bin directory of the Kafka package you downloaded in the Setup steps.
 
 Replace the [*-IP] placeholders with the correct containers ip address. For linux replacing with localhost should be fine, for macs replace with the output of ``boot2docker ip``.
@@ -36,15 +35,10 @@ However if you on a Mac, it might be a bit tricky accessing directly the actual 
 
 TODO -- find a way to access the docker ips directly in osx
 
-- To create a topic (with 1 partition and one replication/copy)
-``
-# This is okay for any setup (1 or more node kafkas). Experiment with the partition numbers
-./kafka-topics.sh --zookeeper [ZOOKEEPER-IP]:2181 --create --topic test --partitions 1 --replication-factor 1
-# This next one is ideally should be for a multi-node cluster, you can still run a similar command for a single node cluster
-# just making sure the number of replicas is less/equal to nodes.
-# The following is ideal for a 3 node cluster, my personal rule of thumb is to have the number of partitions and replicas be multiples of the number of nodes 
-./kafka-topics.sh --zookeeper [ZOOKEEPER-IP]:2181 --create --topic test --partitions 9 --replication-factor 3
-`` 
+- To create a topic 
+  ``./kafka-topics.sh --zookeeper [ZOOKEEPER-IP]:2181 --create --topic test --partitions 1 --replication-factor 1``  
+ You can experiment with the partition numbers and replication-factor  
+ A personal rule of thumb is to have the number of partitions and replicas be multiples of the number of nodes 
 
 - To see a list of available topics ``./kafka-topics.sh --zookeeper [ZOOKEEPER-IP]:2181 --list``
 
@@ -66,11 +60,11 @@ TODO -- find a way to access the docker ips directly in osx
 - To consume A message from A particular topic and A particular partition from the latest``./kafka-run-class.sh kafka.tools.SimpleConsumerShell --broker-list "[BROKER-IP]:9092" --max-messages 1 --topic test --partition 1 --offset -1``
 
 
-# Notes
+##  Notes
 1. Currently the zookeeper and kafka containers use volumes that are on the local filesystem for Linux, but for Macs are inside the boot2docker vm (type `boot2docker ssh` and explore /tmp/docker). These volumes will survive container restarts and should be deleted (and recreated for linux users) if you want your containers to start with clean volumes.
+2. If you need to repoint the soft link, please shutdown and remove the current configuration first ``docker-compose stop && docker-compose rm``
 
-
-# TODO
+##  TODO
 1. Noticed a big amount of CPU and Memory usage once with the 1 node zookeeper and 3 node kafka setup. Need to look further into this.
 2. Expose/link the configuration directories of zookeeper and kafka containers the same way the logs and data directories are exposed. This will allow people to further experiment with various configurations
 3. Explore using a data/volume container.
