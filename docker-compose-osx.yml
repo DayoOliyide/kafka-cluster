@@ -6,8 +6,8 @@ zookeeper:
   environment:
     ZK_SERVER_ID: 1
   volumes:
-    - ~/tmp/docker/zk1/logs:/logs
-    - ~/tmp/docker/zk1/logs:/data
+    - /tmp/docker/zk1/logs:/logs
+    - /tmp/docker/zk1/data:/data
 
 
 kafka:
@@ -21,6 +21,6 @@ kafka:
     KAFKA_BROKER_ID: 1
     KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
   volumes:
-    - ~/tmp/docker/kafka1/logs:/logs
-    - ~/tmp/docker/kafka1/data:/data
+    - /tmp/docker/kafka1/logs:/logs
+    - /tmp/docker/kafka1/data:/data
 
