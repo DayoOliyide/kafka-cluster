@@ -5,7 +5,7 @@ This repository gives you the ability to create a local kafka cluster for develo
 1. Install [Docker](https://docs.docker.com/installation/#installation) onto your system 
 2. Install [Docker-compose](https://docs.docker.com/compose/install/)
 3. Download [0.8.2.1](http://kafka.apache.org/downloads.html) version of Kafka and unzip in a location of your choice, you'll need this mainly for the kafka command/console tools
-4. Erm, just in case you forgot, you'll need to clone this repo :)
+4. After cloning this repo, set up the appropriate link. For Linux ``ln -fns docker-compose-linux.yml docker-compose.yml.`` .  For Macs ``ln -fns docker-compose-osx.yml docker-compose.yml``
 
 # Running 
 1. You'll need to create local directories (under ~/tmp/docker) that are linked to directories internally used by the containers. Set up all associated local volumes/directories by running this command
