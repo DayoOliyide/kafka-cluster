@@ -19,12 +19,16 @@ mkdir -p `grep /tmp/docker docker-compose.yml | cut -d' ' -f6 | cut -d':' -f1 | 
 
 # Stopping
 To stop all the containers running ``docker-compose stop`` 
+To remove all the containers ``docker-compose rm``
 
 # Kafka Commands
-The following commands are in the bin directory of the Kafka package you downloaded in the Setup steps
+The following commands are in the bin directory of the Kafka package you downloaded in the Setup steps.
+
 Replace the [*-IP] placeholders with the correct containers ip address. For linux replacing with localhost should be fine, for macs replace with the output of ``boot2docker ip``.
+
 To find out the actual ips of all containers run ``docker ps | cut -d' ' -f1 | tail -n +2 | xargs -I {} docker inspect --format '{{.Config.Image }} {{ .NetworkSettings.IPAddress }}' {}``
 However if you on a Mac, it might be a bit tricky accessing directly the actual ips of the containers.
+
 TODO -- find a way to access the docker ips directly in osx
 
 - To create a topic (with 1 partition and one replication/copy) ``./kafka-topics.sh --zookeeper [ZOOKEEPER-IP]:2181 --create --topic test
