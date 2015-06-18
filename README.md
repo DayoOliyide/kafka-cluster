@@ -5,14 +5,14 @@ This repository gives you the ability to create a local kafka cluster for develo
 1. Install [docker](https://docs.docker.com/installation/#installation) onto your system 
 2. Install [docker-compose](https://docs.docker.com/compose/install/)
 3. Download [0.8.2.1](http://kafka.apache.org/downloads.html) version of kafka and unzip in a location of your choice, you'll need this mainly for the kafka command/console tools
-4. After cloning this repo, set up the appropriate docker-compose.yml link.
-there are 2 configurations - a single node kafka and a three node kafka (both using a single zookeeper in standalone mode)
-to use a three node kafka cluster, run ``ln -fns ./configs/three-node-kafka.yml docker-compose.yml``  
-to use a single node kafka cluster, run ``ln -fns ./configs/one-node-kafka.yml docker-compose.yml``  
+4. After cloning this repo, set up the appropriate docker-compose.yml link.   
+There are 2 configurations, a single node kafka and a three node kafka (both using a single zookeeper in standalone mode)   
+To use a three node kafka cluster, run ``ln -fns ./configs/three-node-kafka.yml docker-compose.yml``  
+To use a single node kafka cluster, run ``ln -fns ./configs/one-node-kafka.yml docker-compose.yml``  
 
 ##  Running 
 1. This step only applies to linux users, mac users should skip this. you'll need to create local directories (under /tmp/docker) that are linked to directories internally used by the containers. set up all associated local volumes/directories by running this command  
-``mkdir -p `grep /tmp/docker docker-compose.yml | cut -d' ' -f6 | cut -d':' -f1 | sort``
+``mkdir -p `grep /tmp/docker docker-compose.yml | cut -d' ' -f6 | cut -d':' -f1 | sort` `` 
 2. Ensure docker is running (mac users follow these [steps](https://docs.docker.com/installation/mac/#from-your-command-line))
 3. Start all the needed containers.run ``docker-compose up -d``
 4. Running ``docker-compose ps`` or ``docker ps`` should show at least a zookeeper container and 1 or 3 kafka containers
@@ -24,24 +24,25 @@ The exposed container ports can still be reached by going to the VM's ip (run `b
 Containers within boot2docker end up with ip addresses that aren't reachable from the host/local machine, this stops clients outside of the boot2docker vm from sending/consuming to and from the actual Kafka Nodes.
 ####The Solution (not perfect but good enough) 
 For mac users to use the kafka node hostname/ip addesses, we'll need to route the subnet ip range that the docker containers are using to the boot2docker vm ip (remember we are exposing the container ports on this ip already).  
-You'll need to carry out the following steps
+You'll need to carry out the following steps   
 1. Find out the boot2docker vm's ip by running ``boot2docker ip``
 2. Find out the subnet range being used by the containers, by running ``docker ps | cut -d' ' -f1 | tail -n +2 | xargs -I {} docker inspect --format '{{.Config.Image }} {{ .NetworkSettings.IPAddress }}' {}``  
 You should see a bunch of image names and ips like ``samsara/kafka:latest 172.17.0.8
 samsara/kafka:latest 172.17.0.7
 samsara/kafka:latest 172.17.0.6
 samsara/zookeeper:latest 172.17.0.5``  
-In this example, they are on the 172.17.0.0 subnet range.
-3. Check for any existing routing rules by running ``netstat -rn | grep REPLACE-ME`` **Replace REPLACE-ME with container subnet (in our case 172.17)**
+In this example, they are on the 172.17.0.0 subnet range, so we'll use it for the following commands  
+**If your subnet range is different, please use it instead**  
+3. Check for any existing routing rules by running ``netstat -rn | grep 172.17`` 
 4. If a rule exists, just make sure you can reach the container ips and any ports.
-5. If a rule doesn't exist, create one by running ``sudo route -n add REPLACE-ME/24 $(boot2docker ip)`` **Replace REPLACE-ME with container subnet (in our case 172.17.0.0).** Then check you can reach the container ips and ports
+5. If a rule doesn't exist, create one by running ``sudo route -n add 172.17.0.0/24 $(boot2docker ip)``. Then check you can reach the container ips and ports
 
-To remove a routing rule run ``sudo route -n delete REPLACE-ME/24 $(boot2docker ip)`` **Replace with container subnet (in our case 172.17.0.0)**
+To remove a routing rule run ``sudo route -n delete 172.17.0.0/24 $(boot2docker ip)`` 
 
 
 ##  Stopping
-To stop all the containers running ``docker-compose stop`` 
-To remove all the containers ``docker-compose rm``
+To stop all the containers running ``docker-compose stop``   
+To remove all the containers ``docker-compose rm``  
 
 ##  Kafka commands
 The following commands are in the bin directory of the kafka package you downloaded in the setup steps.
