@@ -1,4 +1,0 @@
-# TODO Move this into an actual image specially for osx 
-
-kafka-osx:
-  build: ../kafka
