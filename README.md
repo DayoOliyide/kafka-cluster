@@ -32,6 +32,7 @@ You should see a bunch of image names and ips like
 > samsara/kafka:latest 172.17.0.7  
 > samsara/kafka:latest 172.17.0.6  
 > samsara/zookeeper:latest 172.17.0.5  
+
 3) Check for any existing routing rules by running ``netstat -rn | grep 172.17``   
 4) If a rule exists, just make sure you can reach the container ips and any ports.   
 5) If a rule doesn't exist, create one by running ``sudo route -n add 172.17.0.0/24 $(boot2docker ip)``. Then check you can reach the container ips and ports  
