@@ -4,11 +4,7 @@ This repository gives you the ability to create a local kafka cluster for develo
 ##  Setup
 1. Install [docker](https://docs.docker.com/installation/#installation) onto your system 
 2. Install [docker-compose](https://docs.docker.com/compose/install/)
-3. Download [0.8.2.1](http://kafka.apache.org/downloads.html) version of kafka and unzip in a location of your choice, you'll need this mainly for the kafka command/console tools
-4. After cloning this repo, set up the appropriate docker-compose.yml link.   
-There are 2 configurations, a single node kafka and a three node kafka (both using a single zookeeper in standalone mode)   
-To use a three node kafka cluster, run ``ln -fns ./configs/three-node-kafka.yml docker-compose.yml``  
-To use a single node kafka cluster, run ``ln -fns ./configs/one-node-kafka.yml docker-compose.yml``  
+3. Download [Confluent Platform](http://confluent.io/downloads/) zip file and unzip in a location of your choice, you'll need this mainly for the kafka command/console tools
 
 ##  Running 
 1. This step only applies to linux users, mac users should skip this. you'll need to create local directories (under /tmp/docker) that are linked to directories internally used by the containers. set up all associated local volumes/directories by running this command  
@@ -52,42 +48,42 @@ To find out the actual ips of all containers run
 *In actuality these are the ip's that you should use in the following commands, but since we've exposed the ports to the docker host, we'll use the localhost for linux and $(boot2docker ip) for osx*
 
 - **Create a topic**   
-  Linux - ``./kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 1 --replication-factor 1``  
-  Osx - ``./kafka-topics.sh --zookeeper $(boot2docker ip):2181 --create --topic test --partitions 1 --replication-factor 1``  
+  Linux - ``./kafka-topics --zookeeper localhost:2181 --create --topic test --partitions 1 --replication-factor 1``  
+  Osx - ``./kafka-topics --zookeeper $(boot2docker ip):2181 --create --topic test --partitions 1 --replication-factor 1``  
  you can experiment with the partition numbers and replication-factor  
  a personal rule of thumb is to have the number of partitions and replicas be multiples of the number of nodes 
 
 - **List all available topics**   
-  Linux - ``./kafka-topics.sh --zookeeper localhost:2181 --list``  
-  Osx - ``./kafka-topics.sh --zookeeper $(boot2docker ip):2181 --list``  
+  Linux - ``./kafka-topics --zookeeper localhost:2181 --list``  
+  Osx - ``./kafka-topics --zookeeper $(boot2docker ip):2181 --list``  
 
 - **Detailed list of topics, partitions and partition leaders**   
-  Linux - ``./kafka-topics.sh --zookeeper localhost:2181 --describe``   
-  Osx - ``./kafka-topics.sh --zookeeper $(boot2docker ip):2181 --describe``   
+  Linux - ``./kafka-topics --zookeeper localhost:2181 --describe``   
+  Osx - ``./kafka-topics --zookeeper $(boot2docker ip):2181 --describe``   
 
 - **Send a message to a topic**   
-  Linux - ``echo 'Fear is the mind killer' | ./kafka-console-producer.sh --broker-list localhost:9092 --topic test``  
-  Osx - ``echo 'Fear is the mind killer' | ./kafka-console-producer.sh --broker-list $(boot2docker ip):9092 --topic test``  
+  Linux - ``echo 'Fear is the mind killer' | ./kafka-console-producer --broker-list localhost:9092 --topic test``  
+  Osx - ``echo 'Fear is the mind killer' | ./kafka-console-producer --broker-list $(boot2docker ip):9092 --topic test``  
 
 - **To send a bunch of messages (manually) via the console (press enter to send each message)**   
-  Linux - ``./kafka-console-producer.sh --broker-list localhost:9092 --topic test``  
-  Osx - ``./kafka-console-producer.sh --broker-list $(boot2docker ip):9092 --topic test``  
+  Linux - ``./kafka-console-producer --broker-list localhost:9092 --topic test``  
+  Osx - ``./kafka-console-producer --broker-list $(boot2docker ip):9092 --topic test``  
 
 - **To continuously consume the latest messages from a topic and all it's partitions**   
-  Linux - ``./kafka-console-consumer.sh --zookeeper localhost:2181 --topic test``   
-  Osx - ``./kafka-console-consumer.sh --zookeeper $(boot2docker ip):2181 --topic test``   
+  Linux - ``./kafka-console-consumer --zookeeper localhost:2181 --topic test``   
+  Osx - ``./kafka-console-consumer --zookeeper $(boot2docker ip):2181 --topic test``   
 
-- **To consume ALL the messages from a topic and all it's partitions from the beginning** (CAREFUL, there can be a lot of messages)   
-  Linux - ``./kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning``   
-  Osx - ``./kafka-console-consumer.sh --zookeeper $(boot2docker ip):2181 --topic test --from-beginning``   
+- **To consume ALL the messages from a topic and all it's partitions from the beginning**    
+  Linux - ``./kafka-console-consumer --zookeeper localhost:2181 --topic test --from-beginning``   
+  Osx - ``./kafka-console-consumer --zookeeper $(boot2docker ip):2181 --topic test --from-beginning``   
 
 - **To consume A message from A particular topic and A particular partition from the begining**   
-  Linux - ``./kafka-run-class.sh kafka.tools.SimpleConsumerShell --broker-list "localhost:9092" --max-messages 1 --topic test --partition 1 --offset -2``  
-  Osx - ``./kafka-run-class.sh kafka.tools.SimpleConsumerShell --broker-list "$(boot2docker ip):9092" --max-messages 1 --topic test --partition 1 --offset -2``  
+  Linux - ``./kafka-run-class kafka.tools.SimpleConsumerShell --broker-list "localhost:9092" --max-messages 1 --topic test --partition 1 --offset -2``  
+  Osx - ``./kafka-run-class kafka.tools.SimpleConsumerShell --broker-list "$(boot2docker ip):9092" --max-messages 1 --topic test --partition 1 --offset -2``  
 
 - **To consume A message from A particular topic and A particular partition from the latest**   
-  Linux - ``./kafka-run-class.sh kafka.tools.SimpleConsumerShell --broker-list "localhost:9092" --max-messages 1 --topic test --partition 1 --offset -1``  
-  Osx - ``./kafka-run-class.sh kafka.tools.SimpleConsumerShell --broker-list "$(boot2docker ip):9092" --max-messages 1 --topic test --partition 1 --offset -1``  
+  Linux - ``./kafka-run-class kafka.tools.SimpleConsumerShell --broker-list "localhost:9092" --max-messages 1 --topic test --partition 1 --offset -1``  
+  Osx - ``./kafka-run-class kafka.tools.SimpleConsumerShell --broker-list "$(boot2docker ip):9092" --max-messages 1 --topic test --partition 1 --offset -1``  
 
 
 ##  Notes

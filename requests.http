@@ -1,7 +1,6 @@
 #####  A file of useful http requests for emacs restclient users
 
 #################### Schema Registry calls #################### 
-
 GET http://192.168.59.103:8081/subjects
 Accept: application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json
 
@@ -42,7 +41,7 @@ Accept: application/vnd.kafka.v1+json, application/vnd.kafka+json, application/j
     "partition": 1
   },
   {
-    "value": {"first_name":"Obiwan", "last_name":"Kenobi"}
+    "value": {"first_name":"Obiwan", "last_name":"Kenobi"}"
   }
  ]
 }
